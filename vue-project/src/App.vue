@@ -1,6 +1,6 @@
 <template>
   <section>
-    <router-view class="app-main" /> <!-- your routes will load inside of these tags -->
+    <router-view class="app-main" />
   </section>
 </template>
  
@@ -8,15 +8,23 @@
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
-import { useUserStore } from './store/user.js'
+import { useUserStore } from './stores/user.js'
+import ModalAuth from './components/ModalAuth.vue'
+import ModalSignUp from './components/ModalSignUp.vue'
+import TaskTable from './components/TaskTable.vue'
+import NavBar from './components/NavBar.vue'
  
 const router = useRouter()
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
- 
+
+
+
+
 onMounted(async () => {
   try {
     await userStore.fetchUser() // here we call fetch user
+    console.log(user.value)
     if (!user.value) {
       // redirect them to logout if the user is not there
       router.push({ path: '/auth' });

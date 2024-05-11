@@ -1,9 +1,13 @@
 <script setup>
 
+    import NavBar from '@/components/NavBar.vue';
+    import TaskTable from '@/components/TaskTable.vue';
+
 </script>
 
 <template>
-    <h1>Componente Dashboard</h1>
+    <NavBar></NavBar>
+    <TaskTable></TaskTable>
 </template>
 
 <style scoped>
