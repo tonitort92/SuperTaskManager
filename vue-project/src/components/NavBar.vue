@@ -1,4 +1,16 @@
 <script setup>
+import { useUserStore } from '../stores/user';  
+
+const userStore = useUserStore();
+
+const handleLogOut = async () => {
+    try {
+        await userStore.logOut();
+        alert("Has cerrado sesión con éxito.");
+    } catch (error) {
+        alert("Error al cerrar sesión: " + error.message);
+    }
+}
 </script>
 
 <template>
@@ -8,7 +20,7 @@
             <ul>
                 <li>TASKS</li>
                 <li>PROFILE</li>
-                <li>LOG OUT</li>
+                <router-link  :to="'/auth'"><li @click="handleLogOut">LOG OUT</li></router-link>
             </ul>
         </nav>
     </header>
@@ -25,6 +37,7 @@ header{
     position: fixed;
     width: 100%;
     top: 0;
+    z-index: 99;
 }
 
 nav {
@@ -64,5 +77,8 @@ nav ul li:nth-of-type(1){
     margin-left: 0;
 }
 
+a.router-link-active {
+    margin-left: 80px;
+}
 
 </style>

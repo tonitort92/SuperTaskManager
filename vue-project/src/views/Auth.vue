@@ -1,9 +1,14 @@
 <script setup>
 
+import ModalAuth from '@/components/ModalAuth.vue'
+import ModalSignUp from '@/components/ModalSignUp.vue'
+import NavBar from '@/components/NavBar.vue'
+
 </script>
 
 <template>
-    <h1>Componente Auth</h1>
+    <NavBar></NavBar>
+    <ModalAuth></ModalAuth>
 </template>
 
 <style scoped>

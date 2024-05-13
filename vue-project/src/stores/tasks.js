@@ -15,5 +15,9 @@ export const useTaskStore = defineStore("tasks", {
         .order("id", { ascending: false });
       this.tasks = tasks;
     },
+    async addTask(){
+      
+    }
   },
 });
+

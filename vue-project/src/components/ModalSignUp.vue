@@ -1,26 +1,64 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue';
+import { useUserStore } from '@/stores/user'; 
+import router from '@/router/index';
+
+const authMail = ref('');
+const authPassword = ref('');
+const authConfirm = ref('');
+const signedUp = ref(false);
+const userStore = useUserStore();
+
+
+async function handleSignUp() {
+    if (authPassword.value !== authConfirm.value) {
+        alert("Las contraseñas no coinciden");
+        signedUp.value = false;
+        return;
+    } 
+    
+    if (authPassword.value.length < 6) {
+        alert('La contraseña es demasiado corta');
+        return;
+    }
+
+    if (!authMail.value.includes('@') || !authMail.value.includes('.')) {
+        alert('Parece que no has puesto un correo válido');
+        return;
+    }
+
+    try {
+        await userStore.signUp(authMail.value, authPassword.value);
+        signedUp.value = true;
+        alert("¡Bravo! Te has registrado a SuperTaskManager. Bienvenido a la plataforma :D");
+        router.push('/auth');
+    } catch (error) {
+        alert(error.message);
+        signedUp.value = false;
+    }
+}
+</script>
 
 <template>
-
     <div id="modal-auth-wrapper">
         <div id="modal-auth">
             <img src="../assets/hello-hand.webp">
             <h2>¡Date de alta en <span>SuperTaskManager!</span></h2>
             <h3>Logueate en la aplicación usando tu usuario y contraseña</h3>
-            <form>
-                <input placeholder="Correo electrónico">
-                <input placeholder="Contraseña">
-                <input placeholder="Confirma la contraseña">
-                <button>DARTE DE ALTA</button>
+            <form @submit.prevent="handleSignUp">
+                <input v-model="authMail" placeholder="Correo electrónico">
+                <input type="password" v-model="authPassword" placeholder="Contraseña">
+                <input type="password" v-model="authConfirm" placeholder="Confirma la contraseña">
+                <button type="submit">DARTE DE ALTA</button>
             </form>
+            <p>Ya tengo una cuenta, <router-link :to="'/auth'">quiero loguearme</router-link></p>
         </div>
     </div>
-
 </template>
 
 <style scoped>
 
-#modal-auth-wrapper{
+#modal-auth-wrapper{ 
     display: flex;
     align-items: center;
     align-content: center;
@@ -103,5 +141,9 @@
 #modal-auth img{
     width: 120px;
 }
+
+a:-webkit-any-link { text-decoration: none; color: cornflowerblue; font-weight: 500; }
+
+a:-webkit-any-link:hover { text-decoration: none; color: rgb(62, 107, 190); font-weight: 500; }
 
 </style>
