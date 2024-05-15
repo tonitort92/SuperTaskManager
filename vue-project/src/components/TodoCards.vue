@@ -10,17 +10,27 @@ const taskStore = useTaskStore();
 const { user } = storeToRefs(userStore);
 const { tasks } = storeToRefs(taskStore);
 
+const isShown = ref(false);
+
 const todoTaskArea = 'To do';
+
+const taskTitleEdit = ref('');
+const taskDescriptionEdit = ref('');
+const taskTagEdit = ref('');
+const taskAreaEdit = ref('');
+
+const selectedTaskId = ref(null); // Para almacenar el ID de la tarea seleccionada
+const selectedTask = ref(null); // Para almacenar la tarea seleccionada
 
 const todoTasks = computed(() => {
   return tasks.value ? tasks.value.filter(task => task.area === todoTaskArea) : [];
 });
 
-const handleUpdateTaskArea = async (taskId,task) => {
+const handleUpdateTaskArea = async (taskId, task) => {
   try {
     task.is_complete = !task.is_complete;
     task.area = 'Done';
-    await taskStore.updateTaskArea(taskId, task);
+    await taskStore.updateTask(taskId, task);
     if (user.value) {
       console.log("Fetching tasks for user:", user.value.user.id);
       await taskStore.fetchTasks(user.value.user.id); 
@@ -40,9 +50,80 @@ const handleDeleteTask = async (taskId) => {
     console.error('Error deleting task:', error);
   }
 };
+
+const openEditModal = (task) => {
+  isShown.value = true;
+  selectedTaskId.value = task.id; 
+  selectedTask.value = task; 
+  taskTitleEdit.value = task.title;
+  taskDescriptionEdit.value = task.description;
+  taskTagEdit.value = task.tag;
+  taskAreaEdit.value = task.area;
+};
+
+const handleEditTask = async () => {
+  const taskId = selectedTaskId.value;
+  const task = selectedTask.value;
+
+  if (taskTitleEdit.value.length > 30) {
+    alert('El título es demasiado largo, no puedes superar las 30 palabras');
+  } else if (taskTitleEdit.value.length < 3) {
+    alert('El título es demasiado corto, necesitas más de 3 palabras');
+  } else if (taskDescriptionEdit.value.length < 10) {
+    alert('La descripción es demasiado corta, necesitas más de 10 palabras');
+  } else if (taskDescriptionEdit.value.length > 150) {
+    alert('La descripción es demasiado larga, no puedes superar las 150 palabras');
+  } else if (!taskTagEdit.value.includes('#') || taskTagEdit.value.includes(' ')) {
+    alert('Necesitas incluir # al principio del tag y no puedes añadir espacios. Un solo tag por card');
+  } else if (taskAreaEdit.value == '' || taskAreaEdit.value.length < 1) {
+    alert('Necesitas seleccionar la area de trabajo de tu card');
+  } else {
+    if (!user.value.user.id) {
+      alert('Error: No se pudo obtener el ID del usuario. Por favor, asegúrate de estar logueado.');
+      return;
+    }
+    try {
+      task.title = taskTitleEdit.value;
+      task.description = taskDescriptionEdit.value;
+      task.tag = taskTagEdit.value;
+      task.area = taskAreaEdit.value;
+      await taskStore.updateTask(taskId, task);
+      if (user.value) {
+        console.log("Fetching tasks for user:", user.value.user.id);
+        await taskStore.fetchTasks(user.value.user.id); 
+      }
+      isShown.value = false; // Cerrar el modal después de actualizar la tarea
+    } catch (error) {
+      console.error('Error updating task:', error);
+    }
+  }
+};
 </script>
 
 <template>
+  <div v-if="isShown" id="modal-edit-task-wrapper">
+    <div id="modal-edit-task">
+      <h4>Edita la tarea</h4>
+      <form @submit.prevent="handleEditTask">
+        <input v-model="taskTitleEdit" type="text" placeholder="Escribe un título a tu card">
+        <textarea v-model="taskDescriptionEdit" placeholder="Describe yourself here..."></textarea>
+        <input v-model="taskTagEdit" type="text" placeholder="Escribe '#' y el tag identificador">
+        <label for="area-of-work">ESTADO DE LA CARD:</label>
+        <select v-model="taskAreaEdit" id="area-of-work" name="areas">
+          <option value="Backlog">BACKLOG</option>
+          <option value="Commited">COMMITED</option>
+          <option value="To do">TO DO</option>
+          <option value="Doing">DOING</option>
+          <option value="Done">DONE</option>
+        </select>
+        <div>
+          <button type="submit">Actualizar</button>
+          <button @click.prevent="isShown = false">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div class="task-card" v-for="task in todoTasks" :key="task.id">
     <div class="task-card-title">
       <h4>{{ task.title }}</h4>
@@ -56,7 +137,7 @@ const handleDeleteTask = async (taskId) => {
     </div>
     <div class="task-card-actions">
       <button @click="handleUpdateTaskArea(task.id, task)"></button>
-      <button @click="taskStore.editTask(task.id)"></button>
+      <button @click.prevent="openEditModal(task)"></button>
       <button @click="handleDeleteTask(task.id)"></button>
     </div>
   </div>
@@ -64,6 +145,123 @@ const handleDeleteTask = async (taskId) => {
 
 
 <style scoped>
+#modal-edit-task-wrapper {
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(2px);
+    height: 100vh;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    z-index: 1000; 
+    display: flex;
+}
+
+#modal-edit-task {
+    max-width: 640%;
+    min-width: 640px;
+    border-radius: 10px;
+    background-color: #fff;
+    padding:20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    height: 500px;
+    gap: 30px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    border-top: 20px solid rgba(59,126,195,1);
+    border-bottom: 20px solid rgba(59,126,195,1);;
+}
+
+#modal-edit-task h4 {
+    font-size: 28px;
+}
+
+#modal-edit-task form {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+#modal-edit-task form input{
+    border: none;
+    border-radius: 20px;
+    background-color: #f8f8f8;
+    height: 30px;
+    text-align: center;
+    width: 400px;
+
+}
+
+#modal-edit-task form input:focus {
+    outline: none;
+    border: 3px solid rgba(59,126,195,1);
+    background-color: rgb(239, 247, 255);
+
+  }
+  
+
+#modal-edit-task form button{
+    height: 45px;
+    width: 200px;
+    border: none; 
+    border-radius: 20px;
+    margin-top: 20px;
+    background: rgb(59,126,195);
+    background: linear-gradient(32deg, rgba(59,126,195,1) 33%, rgba(0,212,255,1) 100%);
+    color: white;
+    font-weight: bolder;
+    letter-spacing: 3px;
+    height: 40px;
+}
+
+#modal-edit-task form button:hover{
+    background: rgb(59,126,195);
+    background: linear-gradient(32deg, rgb(34, 89, 145) 33%, rgb(61, 129, 143) 100%);
+}
+
+#modal-edit-task form button:nth-of-type(2){
+    height: 45px;
+    width: 200px;
+    border: none; 
+    border-radius: 20px;
+    margin-top: 20px;
+    background: crimson;
+    background: crimson;
+    color: white;
+    font-weight: bolder;
+    letter-spacing: 3px;
+    height: 40px;
+}
+
+#modal-edit-task form button:nth-of-type(2):hover{
+    height: 45px;
+    width: 200px;
+    border: none; 
+    border-radius: 20px;
+    margin-top: 20px;
+    background: crimson;
+    background: rgb(129, 10, 34);
+    color: white;
+    font-weight: bolder;
+    letter-spacing: 3px;
+    height: 40px;
+}
+
+#modal-edit-task form div {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
 
 #task-table .task-card{
     background-color: #fcfcfc;

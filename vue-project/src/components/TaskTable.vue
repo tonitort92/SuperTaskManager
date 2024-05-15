@@ -15,6 +15,7 @@ import DoneCards from './DoneCards.vue';
 </script>
 
 <template>
+
     <div id="task-table-wrapper">
         <div id="task-table">
             <table>
@@ -67,7 +68,7 @@ import DoneCards from './DoneCards.vue';
     padding: 50px;
     border-radius: 20px;
     width: 100%;
-    height: 80%;
+    height: auto;
     max-width: 1440px;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     margin-top: 100px;
@@ -90,6 +91,7 @@ import DoneCards from './DoneCards.vue';
 #task-table td {
     border-radius: 20px;
     width: 20%;
+    max-width: 20%;
     margin-right: 5%;
     margin-left: 5%;
 

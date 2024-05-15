@@ -37,7 +37,7 @@ export const useTaskStore = defineStore("tasks", {
       }
     },
 
-    async updateTaskArea(taskId, task) {
+    async updateTask(taskId, task) {
       const { error } = await supabase
         .from("tasks")
         .update(task)
@@ -46,6 +46,12 @@ export const useTaskStore = defineStore("tasks", {
       if (error) {
         console.error("Error from Supabase:", error);
         throw error;
+      }
+
+      // Update the task in the local state
+      const taskIndex = this.tasks.findIndex(t => t.id === taskId);
+      if (taskIndex !== -1) {
+        this.tasks[taskIndex] = { ...this.tasks[taskIndex], ...task };
       }
     },
     
