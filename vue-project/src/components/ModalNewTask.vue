@@ -1,36 +1,110 @@
-<script>
-    import { ref } from 'vue';
+<script setup>
+import { ref, onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useTaskStore } from '@/stores/tasks'; 
+import { useUserStore } from '@/stores/user';
 
-    const taskTitle = ref('');
-    const taskDescription = ref('');
-    const taskTag = ref('');
-    const taskArea = ref('');
+const taskTitle = ref('');
+const taskDescription = ref('');
+const taskTag = ref('');
+const taskArea = ref('');
+const isShown = ref(false);
+const taskStore = useTaskStore();
+const userStore = useUserStore();
+const { user } = storeToRefs(userStore);
+
+const taskDate = new Date();
+
+const padToTwoDigits = (num) => String(num).padStart(2, '0');
+
+
+const day = padToTwoDigits(taskDate.getDate());
+const month = padToTwoDigits(taskDate.getMonth() + 1);
+const year = taskDate.getFullYear();
+
+
+const formattedDate = `${year}-${month}-${day}`;
+
+
+async function handleAddTask(){
+
+    if(taskTitle.value.length > 30 ){
+        alert('El título es demasiado largo, no puedes superar las 30 palabras');
+    }
+    else if(taskTitle.value.length < 3){
+        alert('El título es demasiado corto, necesitas más de 3 palabras');
+    }
+    else if(taskDescription.value.length < 10){
+        alert('La descripción es demasiado corta, necesitas más de 10 palabras');
+    }
+    else if(taskDescription.value.length > 150){
+        alert('La descripción es demasiado larga, no puedes superar las 150 palabras');
+    }
+    else if(!taskTag.value.includes('#') || taskTag.value.includes(' ')){
+        alert('Necesitas incluir # al principio del tag y no puedes añadir espacios. Un solo tag por card');
+    }
+    else if(taskArea.value == '' || taskArea.value.length < 1){
+        alert('Necesitas seleccionar la area de trabajo de tu card');
+    }
+
+    if (!user.value.user.id) {
+        alert('Error: No se pudo obtener el ID del usuario. Por favor, asegúrate de estar logueado.');
+        return;
+    }
+
+    try {
+        await taskStore.pushTask({
+            title: taskTitle.value,
+            description: taskDescription.value,
+            tag: taskTag.value,
+            area: taskArea.value,
+            inserted_at: formattedDate,
+            user_id: user.value.user.id
+        });
+        if (user) {
+            taskStore.fetchTasks(user.value.user.id); 
+        }
+
+        alert("¡Tarea creada con éxito!");
+        isShown.value = false;
+        taskTitle.value = '';
+        taskDescription.value = '';
+        taskTag.value = '';
+        taskArea.value = '';
+    } catch (error) {
+        alert(error.message);
+    }
+}
 </script>
 
 <template>
-<div id="modal-new-task-wrapper">
-    <div id="modal-new-task">
-        <h4>Añade una nueva tarea en tu board</h4>
-        <form>
-            <input v-model='taskTitle' type="text" placeholder="Escribe un título a tu card">
-            <textarea v-model='taskDescription'  type="text"  placeholder="Describe yourself here..."></textarea>
-            <input v-model='taskTag' type="text" placeholder="Escribe '#' y el tag identificador">
-            <label for="area-of-work">ESTADO DE LA CARD:</label>
-            <select v-model='taskArea' id="area-of-work" name="areas">
-                <option value="Backlog">selecciona una opción</option>
-                <option value="Backlog">BACKLOG</option>
-                <option value="Commited">COMMITED</option>
-                <option value="To do">TO DO</option>
-                <option value="Doing">DOING</option>
-                <option value="Done">DONE</option>
-            </select>
-            <div>
-                <button type="submit">Crear nueva tarea</button>
-                <button>Cancelar</button>
-            </div>
-        </form>
+    <div id="add-task-container">
+        <button @click="isShown = true">
+            <img src="../assets/add-task-icon.png" alt="Add Task Icon">
+        </button>
     </div>
-</div>
+    <div v-if="isShown" id="modal-new-task-wrapper">
+        <div id="modal-new-task">
+            <h4>Añade una nueva tarea en tu board</h4>
+            <form @submit.prevent="handleAddTask">
+                <input v-model="taskTitle" type="text" placeholder="Escribe un título a tu card">
+                <textarea v-model="taskDescription" placeholder="Describe yourself here..."></textarea>
+                <input v-model="taskTag" type="text" placeholder="Escribe '#' y el tag identificador">
+                <label for="area-of-work">ESTADO DE LA CARD:</label>
+                <select v-model="taskArea" id="area-of-work" name="areas">
+                    <option value="Backlog">BACKLOG</option>
+                    <option value="Commited">COMMITED</option>
+                    <option value="To do">TO DO</option>
+                    <option value="Doing">DOING</option>
+                    <option value="Done">DONE</option>
+                </select>
+                <div>
+                    <button type="submit">Crear nueva tarea</button>
+                    <button @click.prevent="isShown = false">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </template>
 
 <style>
@@ -153,6 +227,30 @@
         gap: 30px;
     }
 
+    #add-task-container {
+        position: fixed;
+        bottom: 50px;
+        right: 50px;
+
+    }
+
+    #add-task-container button {
+        border-radius: 200px;
+        background-color: cornflowerblue;
+        padding: 20px;
+        border: none;
+        box-shadow: rgba(149, 157, 165, 0.6) 0px 0px 16px;
+    }
+
+    #add-task-container button:hover {
+        background-color: rgb(53, 97, 179);
+    }
+    
+    #add-task-container button:active {
+        background-color: rgb(27, 57, 114);
+        padding: 15px;
+    }
+
     select {
         border: none;
         border-radius: 20px;
@@ -191,6 +289,8 @@
         background-color: rgb(239, 247, 255);
         font-family: Work Sans;
     }
+
+    
 
 
 

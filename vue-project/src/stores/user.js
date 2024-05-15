@@ -13,6 +13,7 @@ export const useUserStore = defineStore('user', {
       if (error) throw error;
       if (user) {
         this.user = user;
+        console.log('User stored:', this.user);  // Verifica la estructura aquí
       }
     },
     async signUp(email, password) {

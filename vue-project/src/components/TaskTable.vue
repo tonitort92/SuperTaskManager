@@ -1,9 +1,20 @@
 <script setup>
 
+import BacklogCards from './BacklogCards.vue';
+import CommitedCards from './CommitedCards.vue';
+import TodoCards from './TodoCards.vue';
+import DoingCards from './DoingCards.vue';
+import DoneCards from './DoneCards.vue';
+
+/*onMounted(async () => {
+  if (user.value) {
+    await taskStore.fetchTasks(user.value.id); 
+  }
+});*/
+
 </script>
 
 <template>
-
     <div id="task-table-wrapper">
         <div id="task-table">
             <table>
@@ -18,110 +29,27 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td  width="20%" align="center" valign="middle">
-                            <div class="task-card">
-                                <div class="task-card-title">
-                                    <h4>Carga de datos en Supabase</h4>
-                                </div>
-                                <div class="task-card-data">
-                                    <p>Crear las tablas de profiles y tasks para poder almacenar los datos de estado y el auth del usuario</p>
-                                </div>
-                                <div class="task-card-tags">
-                                    <p>15-09-1992</p>
-                                    <span>#Navidad</span>
-                                </div>
-                                <div class="task-card-actions">
-                                    <button></button>
-                                    <button></button>
-                                    <button></button>
-                                </div>
-                            </div>
+                        <td id="backlog-tasks" width="20%" align="center" valign="top">
+                            <BacklogCards></BacklogCards>
                         </td>
-                        <td  width="20%" align="center" valign="middle">
-                            <div class="task-card">
-                                <div class="task-card-title">
-                                    <h4>Carga de datos en Supabase</h4>
-                                </div>
-                                <div class="task-card-data">
-                                    <p>Crear las tablas de profiles y tasks para poder almacenar los datos de estado y el auth del usuario</p>
-                                </div>
-                                <div class="task-card-tags">
-                                    <p>15-09-1992</p>
-                                    <span>#tags de la tarea</span>
-                                </div>
-                                <div class="task-card-actions">
-                                    <button></button>
-                                    <button></button>
-                                    <button></button>
-                                </div>
-                            </div>
+                        <td id="commited-tasks" width="20%" align="center" valign="top">
+                            <CommitedCards></CommitedCards>
                         </td>
-                        <td  width="20%" align="center" valign="middle">
-                            <div class="task-card">
-                                <div class="task-card-title">
-                                    <h4>Carga de datos en Supabase</h4>
-                                </div>
-                                <div class="task-card-data">
-                                    <p>Crear las tablas de profiles y tasks para poder almacenar los datos de estado y el auth del usuario</p>
-                                </div>
-                                <div class="task-card-tags">
-                                    <p>15-09-1992</p>
-                                    <span>#tags de la tarea</span>
-                                </div>
-                                <div class="task-card-actions">
-                                    <button></button>
-                                    <button></button>
-                                    <button></button>
-                                </div>
-                            </div>
+                        <td id="todo-tasks" width="20%" align="center" valign="top">
+                            <TodoCards></TodoCards>
                         </td>
-                        <td  width="20%" align="center" valign="middle">
-                            <div class="task-card">
-                                <div class="task-card-title">
-                                    <h4>Carga de datos en Supabase</h4>
-                                </div>
-                                <div class="task-card-data">
-                                    <p>Crear las tablas de profiles y tasks para poder almacenar los datos de estado y el auth del usuario</p>
-                                </div>
-                                <div class="task-card-tags">
-                                    <p>15-09-1992</p>
-                                    <span>#tags de la tarea</span>
-                                </div>
-                                <div class="task-card-actions">
-                                    <button></button>
-                                    <button></button>
-                                    <button></button>
-                                </div>
-                            </div>
+                        <td id="doing-tasks" width="20%" align="center" valign="top">
+                            <DoingCards></DoingCards>
                         </td>
-                        <td  width="20%" align="center" valign="middle">
-                            <div class="task-card">
-                                <div class="task-card-title">
-                                    <h4>Carga de datos en Supabase</h4>
-                                </div>
-                                <div class="task-card-data">
-                                    <p>Crear las tablas de profiles y tasks para poder almacenar los datos de estado y el auth del usuario</p>
-                                </div>
-                                <div class="task-card-tags">
-                                    <p>15-09-1992</p>
-                                    <span>#tags de la tarea</span>
-                                </div>
-                                <div class="task-card-actions">
-                                    <button></button>
-                                    <button></button>
-                                    <button></button>
-                                </div>
-                            </div>
+                        <td id="done-tasks" width="20%" align="center" valign="top">
+                            <DoneCards></DoneCards>
                         </td>
                     </tr>
-                    <!-- More rows can be added here -->
                 </tbody>
             </table>
         </div>
     </div>
-
 </template>
-
 <style scoped>
 
 #task-table-wrapper{
@@ -161,7 +89,7 @@
 
 #task-table td {
     border-radius: 20px;
-    width: 20px;
+    width: 20%;
     margin-right: 5%;
     margin-left: 5%;
 
@@ -171,104 +99,6 @@
     background-color: #f7f7f7;
     color: rgb(170, 170, 170);
 
-}
-
-#task-table .task-card{
-    background-color: #fcfcfc;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 85%;
-    padding: 20px;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 10px;
-    margin: auto;
-
-}
-
-#task-table .task-card .task-card-title h4{
-    font-size: 16px;
-}
-
-#task-table .task-card .task-card-data{
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    font-size: 14px;
-}
-
-#task-table .task-card .task-card-tags{
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    font-size: 13px;
-    justify-content: space-between;
-}
-
-#task-table .task-card .task-card-tags p,span{
-    padding: 10px;
-    background-color: #f8f8f8;
-    border-radius: 5px;
-}
-
-#task-table .task-card .task-card-actions{
-    display: flex;
-    flex-direction: row;
-    align-content: space-around;
-
-    justify-content: space-between;
-}
-
-#task-table .task-card .task-card-actions button{
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
-}
-
-#task-table .task-card .task-card-actions button:nth-of-type(1){
-    background-color:cornflowerblue;
-    background-image: url("../assets/clock-icon.png");
-    background-size: 20px;
-    background-position: center;
-    background-repeat: no-repeat;
-    color: white;
-    font-weight: 700;
-}
-
-#task-table .task-card .task-card-actions button:nth-of-type(1):hover{
-    background-color:rgb(56, 99, 180);
-}
-
-#task-table .task-card .task-card-actions button:nth-of-type(2){
-    background-color:rgb(255, 173, 21);
-    color:white;
-    font-weight: 700;
-    background-image: url("../assets/edit-icon.png");
-    background-size: 20px;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-#task-table .task-card .task-card-actions button:nth-of-type(2):hover{
-    background-color: rgb(180, 117, 0);
-}
-
-#task-table .task-card .task-card-actions button:nth-of-type(3){
-    background-color:crimson;
-    color:white;
-    font-weight: 700;
-    background-image: url("../assets/delete-icon.png");
-    background-size: 20px;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-#task-table .task-card .task-card-actions button:nth-of-type(3):hover{
-    background-color:rgb(160, 6, 36);
 }
 
 </style>

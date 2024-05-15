@@ -10,4 +10,8 @@
 
 <style scoped>
 
+a.router-link-exact-active {
+    margin-left: 80px;
+}
+
 </style>

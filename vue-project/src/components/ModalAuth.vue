@@ -5,7 +5,6 @@ import router from '@/router/index';
 
 const email = ref('');
 const password = ref('');
-const session = ref('');
 const userStore = useUserStore();
 
 const handleSignIn = async () => {

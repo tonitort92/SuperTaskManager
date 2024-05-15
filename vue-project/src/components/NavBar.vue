@@ -20,7 +20,7 @@ const handleLogOut = async () => {
             <ul>
                 <li>TASKS</li>
                 <li>PROFILE</li>
-                <router-link  :to="'/auth'"><li @click="handleLogOut">LOG OUT</li></router-link>
+                <router-link class="logout-link" :to="'/auth'"><li @click="handleLogOut">LOG OUT</li></router-link>
             </ul>
         </nav>
     </header>
@@ -77,8 +77,11 @@ nav ul li:nth-of-type(1){
     margin-left: 0;
 }
 
-a.router-link-active {
+
+.logout-link {
     margin-left: 80px;
 }
+
+
 
 </style>
