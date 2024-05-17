@@ -1,10 +1,11 @@
 <script setup>
+    import FakeNavBar from '@/components/FakeNavBar.vue';
     import ModalSignUp from '@/components/ModalSignUp.vue';
-    import NavBar from '@/components/NavBar.vue';
+
 </script>
 
 <template>
-    <NavBar></NavBar>
+    <FakeNavBar></FakeNavBar>
     <ModalSignUp></ModalSignUp>
 </template>
 

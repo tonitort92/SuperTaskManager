@@ -28,6 +28,11 @@ const formattedDate = `${year}-${month}-${day}`;
 
 async function handleAddTask(){
 
+    if (!user.value.user.id) {
+        alert('Error: No se pudo obtener el ID del usuario. Por favor, asegúrate de estar logueado.');
+        return;
+    }
+
     if(taskTitle.value.length > 30 ){
         alert('El título es demasiado largo, no puedes superar las 30 palabras');
     }
@@ -47,21 +52,20 @@ async function handleAddTask(){
         alert('Necesitas seleccionar la area de trabajo de tu card');
     }
 
-    if (!user.value.user.id) {
-        alert('Error: No se pudo obtener el ID del usuario. Por favor, asegúrate de estar logueado.');
-        return;
-    }
+    else{
 
-    try {
-        await taskStore.pushTask({
-            title: taskTitle.value,
-            description: taskDescription.value,
-            tag: taskTag.value,
-            area: taskArea.value,
-            inserted_at: formattedDate,
-            user_id: user.value.user.id
+        try {
+
+            await taskStore.pushTask({
+                title: taskTitle.value,
+                description: taskDescription.value,
+                tag: taskTag.value,
+                area: taskArea.value,
+                inserted_at: formattedDate,
+                user_id: user.value.user.id
         });
-        if (user) {
+
+            if (user) {
             taskStore.fetchTasks(user.value.user.id); 
         }
 
@@ -74,6 +78,11 @@ async function handleAddTask(){
     } catch (error) {
         alert(error.message);
     }
+    }
+
+
+
+
 }
 </script>
 

@@ -4,10 +4,12 @@ import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useUserStore } from './stores/user.js'
 import { useTaskStore } from './stores/tasks.js'
+import { useProfileStore } from './stores/profiles'
  
 const router = useRouter()
 const userStore = useUserStore()
 const taskStore = useTaskStore()
+const profileStore = useProfileStore()
 const { user } = storeToRefs(userStore)
 
 onMounted(async () => {
@@ -18,9 +20,9 @@ onMounted(async () => {
       router.push({ path: '/auth' });
     } else {
       // continue to dashboard
+      await taskStore.fetchTasks(user.value.user.id);
+      await profileStore.fetchProfiles(user.value.user.id);
       router.push({ path: '/' });
-      taskStore.fetchTasks(user.value.user.id);
-      alert("Datos cargados correctamente, el id es " + user.value.user.id);
     }
   } catch (e) {
     console.error(e)

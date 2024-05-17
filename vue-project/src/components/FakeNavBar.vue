@@ -1,26 +1,11 @@
-<script setup>
-import { useUserStore } from '../stores/user';  
-
-const userStore = useUserStore();
-
-const handleLogOut = async () => {
-    try {
-        await userStore.logOut();
-        alert("Has cerrado sesión con éxito.");
-    } catch (error) {
-        alert("Error al cerrar sesión: " + error.message);
-    }
-}
-</script>
-
 <template>
     <header>
         <nav>
             <img src="../assets/task-manager-logo.png">
             <ul>
-                <router-link class="logout-link" :to="'/'"><li>TASKS</li></router-link>
-                <router-link class="logout-link" :to="'/profile'"><li>PROFILE</li></router-link>
-                <router-link class="logout-link" :to="'/auth'"><li @click="handleLogOut">LOG OUT</li></router-link>
+                <li>TASKS</li>
+                <li>PROFILE</li>
+                <li>LOG OUT</li>
             </ul>
         </nav>
     </header>

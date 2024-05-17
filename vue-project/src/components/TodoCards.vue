@@ -146,220 +146,207 @@ const handleEditTask = async () => {
 
 <style scoped>
 #modal-edit-task-wrapper {
-    background-color: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(2px);
-    height: 100vh;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    z-index: 1000; 
-    display: flex;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  height: 100vh;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 1000; 
+  display: flex;
 }
 
 #modal-edit-task {
-    max-width: 640%;
-    min-width: 640px;
-    border-radius: 10px;
-    background-color: #fff;
-    padding:20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
-    height: 500px;
-    gap: 30px;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    border-top: 20px solid rgba(59,126,195,1);
-    border-bottom: 20px solid rgba(59,126,195,1);;
+  max-width: 640px;
+  min-width: 640px;
+  border-radius: 10px;
+  background-color: #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 500px;
+  gap: 30px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  border-top: 20px solid rgba(59,126,195,1);
+  border-bottom: 20px solid rgba(59,126,195,1);
 }
 
 #modal-edit-task h4 {
-    font-size: 28px;
+  font-size: 28px;
 }
 
 #modal-edit-task form {
-    display: flex;
-    flex-direction: column;
-    max-width: 300px;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
 }
 
-#modal-edit-task form input{
-    border: none;
-    border-radius: 20px;
-    background-color: #f8f8f8;
-    height: 30px;
-    text-align: center;
-    width: 400px;
-
+#modal-edit-task form input {
+  border: none;
+  border-radius: 20px;
+  background-color: #f8f8f8;
+  height: 30px;
+  text-align: center;
+  width: 400px;
 }
 
 #modal-edit-task form input:focus {
-    outline: none;
-    border: 3px solid rgba(59,126,195,1);
-    background-color: rgb(239, 247, 255);
-
-  }
-  
-
-#modal-edit-task form button{
-    height: 45px;
-    width: 200px;
-    border: none; 
-    border-radius: 20px;
-    margin-top: 20px;
-    background: rgb(59,126,195);
-    background: linear-gradient(32deg, rgba(59,126,195,1) 33%, rgba(0,212,255,1) 100%);
-    color: white;
-    font-weight: bolder;
-    letter-spacing: 3px;
-    height: 40px;
+  outline: none;
+  border: 3px solid rgba(59,126,195,1);
+  background-color: rgb(239, 247, 255);
 }
 
-#modal-edit-task form button:hover{
-    background: rgb(59,126,195);
-    background: linear-gradient(32deg, rgb(34, 89, 145) 33%, rgb(61, 129, 143) 100%);
+#modal-edit-task form button {
+  height: 45px;
+  width: 200px;
+  border: none; 
+  border-radius: 20px;
+  margin-top: 20px;
+  background: rgb(59,126,195);
+  background: linear-gradient(32deg, rgba(59,126,195,1) 33%, rgba(0,212,255,1) 100%);
+  color: white;
+  font-weight: bolder;
+  letter-spacing: 3px;
+  height: 40px;
 }
 
-#modal-edit-task form button:nth-of-type(2){
-    height: 45px;
-    width: 200px;
-    border: none; 
-    border-radius: 20px;
-    margin-top: 20px;
-    background: crimson;
-    background: crimson;
-    color: white;
-    font-weight: bolder;
-    letter-spacing: 3px;
-    height: 40px;
+#modal-edit-task form button:hover {
+  background: rgb(59,126,195);
+  background: linear-gradient(32deg, rgb(34, 89, 145) 33%, rgb(61, 129, 143) 100%);
 }
 
-#modal-edit-task form button:nth-of-type(2):hover{
-    height: 45px;
-    width: 200px;
-    border: none; 
-    border-radius: 20px;
-    margin-top: 20px;
-    background: crimson;
-    background: rgb(129, 10, 34);
-    color: white;
-    font-weight: bolder;
-    letter-spacing: 3px;
-    height: 40px;
+#modal-edit-task form button:nth-of-type(2) {
+  height: 45px;
+  width: 200px;
+  border: none; 
+  border-radius: 20px;
+  margin-top: 20px;
+  background: crimson;
+  color: white;
+  font-weight: bolder;
+  letter-spacing: 3px;
+  height: 40px;
+}
+
+#modal-edit-task form button:nth-of-type(2):hover {
+  background: rgb(129, 10, 34);
 }
 
 #modal-edit-task form div {
-    display: flex;
-    flex-direction: row;
-    gap: 30px;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
 }
 
-#task-table .task-card{
-    background-color: #fcfcfc;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 85%;
-    padding: 20px;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 10px;
-    margin: auto;
-    margin-bottom: 20px ;
-
+#task-table .task-card {
+  background-color: #fcfcfc;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 85%;
+  padding: 20px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 10px;
+  margin: auto;
+  margin-bottom: 20px;
 }
 
-#task-table .task-card .task-card-title h4{
-    font-size: 16px;
+#task-table .task-card .task-card-title h4 {
+  font-size: 16px;
+  word-wrap: break-word; 
 }
 
-#task-table .task-card .task-card-data{
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    font-size: 14px;
+#task-table .task-card .task-card-data {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 14px;
+  word-wrap: break-word; 
 }
 
-#task-table .task-card .task-card-tags{
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    font-size: 13px;
-    justify-content: space-between;
+#task-table .task-card .task-card-tags {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13px;
+  justify-content: space-between;
+  word-wrap: break-word; 
 }
 
-#task-table .task-card .task-card-tags p,span{
-    padding: 10px;
-    background-color: #f8f8f8;
-    border-radius: 5px;
+#task-table .task-card .task-card-tags p,
+span {
+  padding: 10px;
+  background-color: #f8f8f8;
+  border-radius: 5px;
 }
 
-#task-table .task-card .task-card-actions{
-    display: flex;
-    flex-direction: row;
-    align-content: space-around;
-
-    justify-content: space-between;
+#task-table .task-card .task-card-actions {
+  display: flex;
+  flex-direction: row;
+  align-content: space-around;
+  justify-content: space-between;
 }
 
-#task-table .task-card .task-card-actions button{
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
+#task-table .task-card .task-card-actions button {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
 }
 
-#task-table .task-card .task-card-actions button:nth-of-type(1){
-    background-color:mediumseagreen;
-    background-image:url("../assets/completed-icon.png");
-    background-size: 20px;
-    background-position: center;
-    background-repeat: no-repeat;
-    color: white;
-    font-weight: 700;
+#task-table .task-card .task-card-actions button:nth-of-type(1) {
+  background-color: mediumseagreen;
+  background-image: url("../assets/completed-icon.png");
+  background-size: 20px;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  font-weight: 700;
 }
 
-#task-table .task-card .task-card-actions button:nth-of-type(1):hover{
-    background-color:rgb(31, 126, 73);
+#task-table .task-card .task-card-actions button:nth-of-type(1):hover {
+  background-color: rgb(31, 126, 73);
 }
 
-#task-table .task-card .task-card-actions button:nth-of-type(2){
-    background-color:rgb(255, 173, 21);
-    color:white;
-    font-weight: 700;
-    background-image: url("../assets/edit-icon.png");
-    background-size: 20px;
-    background-position: center;
-    background-repeat: no-repeat;
+#task-table .task-card .task-card-actions button:nth-of-type(2) {
+  background-color: rgb(255, 173, 21);
+  color: white;
+  font-weight: 700;
+  background-image: url("../assets/edit-icon.png");
+  background-size: 20px;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-#task-table .task-card .task-card-actions button:nth-of-type(2):hover{
-    background-color: rgb(180, 117, 0);
+#task-table .task-card .task-card-actions button:nth-of-type(2):hover {
+  background-color: rgb(180, 117, 0);
 }
 
-#task-table .task-card .task-card-actions button:nth-of-type(3){
-    background-color:crimson;
-    color:white;
-    font-weight: 700;
-    background-image: url("../assets/delete-icon.png");
-    background-size: 20px;
-    background-position: center;
-    background-repeat: no-repeat;
+#task-table .task-card .task-card-actions button:nth-of-type(3) {
+  background-color: crimson;
+  color: white;
+  font-weight: 700;
+  background-image: url("../assets/delete-icon.png");
+  background-size: 20px;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-#task-table .task-card .task-card-actions button:nth-of-type(3):hover{
-    background-color:rgb(160, 6, 36);
+#task-table .task-card .task-card-actions button:nth-of-type(3):hover {
+  background-color: rgb(160, 6, 36);
 }
-
 </style>

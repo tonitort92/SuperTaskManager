@@ -258,6 +258,7 @@ const handleEditTask = async () => {
 
 #task-table .task-card .task-card-title h4 {
   font-size: 16px;
+  word-wrap: break-word; 
 }
 
 #task-table .task-card .task-card-data {
@@ -265,14 +266,16 @@ const handleEditTask = async () => {
   flex-direction: column;
   gap: 5px;
   font-size: 14px;
+  word-wrap: break-word; 
 }
 
 #task-table .task-card .task-card-tags {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 10px;
   font-size: 13px;
   justify-content: space-between;
+  word-wrap: break-word; 
 }
 
 #task-table .task-card .task-card-tags p,
