@@ -18,6 +18,7 @@ const handleSignIn = async () => {
         await userStore.signIn(email.value, password.value);
         console.log(user.value)
         alert("¡Inicio de sesión exitoso!");
+        await userStore.fetchUser();
         await taskStore.fetchTasks(user.value.id);
         await profileStore.fetchProfiles(user.value.id);
         router.push('/');
