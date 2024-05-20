@@ -6,7 +6,6 @@ const userStore = useUserStore();
 const handleLogOut = async () => {
     try {
         await userStore.logOut();
-        alert("Has cerrado sesión con éxito.");
     } catch (error) {
         alert("Error al cerrar sesión: " + error.message);
     }
