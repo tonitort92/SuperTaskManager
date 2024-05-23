@@ -20,22 +20,22 @@ const taskAreaEdit = ref('');
 const selectedTaskId = ref(null); 
 const selectedTask = ref(null);
 
-const commitedTaskArea = 'Commited';
+const committedTaskArea = 'Commited';
 
-const commitedTasks = computed(() => {
-  return tasks.value ? tasks.value.filter(task => task.area === commitedTaskArea) : [];
+const committedTasks = computed(() => {
+  return tasks.value ? tasks.value.filter(task => task.area === committedTaskArea) : [];
 });
 
 const fetchTasksForUser = async () => {
   if (user.value) {
-    await taskStore.fetchTasks(user.value.user.id);
+    await taskStore.fetchTasks(user.value.id);
   }
 };
 
 const handleUpdateTaskArea = async (taskId, task) => {
   try {
     task.is_complete = !task.is_complete;
-    task.area = task.is_complete ? 'Done' : commitedTaskArea;
+    task.area = task.is_complete ? 'Done' : committedTaskArea;
     await taskStore.updateTask(taskId, task);
     await fetchTasksForUser();
   } catch (error) {
@@ -79,7 +79,7 @@ const handleEditTask = async () => {
   } else if (taskAreaEdit.value == '' || taskAreaEdit.value.length < 1) {
     alert('Necesitas seleccionar la area de trabajo de tu card');
   } else {
-    if (!user.value.user.id) {
+    if (!user.value.id) {
       alert('Error: No se pudo obtener el ID del usuario. Por favor, asegúrate de estar logueado.');
       return;
     }
@@ -122,7 +122,7 @@ const handleEditTask = async () => {
     </div>
   </div>
   
-  <div class="task-card" v-for="task in commitedTasks" :key="task.id">
+  <div class="task-card" v-for="task in committedTasks" :key="task.id">
     <div class="task-card-title">
       <h4>{{ task.title }}</h4>
     </div>
@@ -140,6 +140,7 @@ const handleEditTask = async () => {
     </div>
   </div>
 </template>
+
 
 <style scoped>
 #modal-edit-task-wrapper {

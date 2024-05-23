@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useUserStore } from '@/stores/user'; 
 import router from '@/router/index';
-import { useTaskStore } from '@/stores/tasks.js'
+import { useTaskStore } from '@/stores/tasks.js';
 import { storeToRefs } from 'pinia';
 import { useProfileStore } from '@/stores/profiles';
 
@@ -16,7 +16,6 @@ const { user } = storeToRefs(userStore);
 const handleSignIn = async () => {
     try {
         await userStore.signIn(email.value, password.value);
-        console.log(user.value)
         alert("¡Inicio de sesión exitoso!");
         await userStore.fetchUser();
         await taskStore.fetchTasks(user.value.id);
@@ -26,7 +25,6 @@ const handleSignIn = async () => {
         alert("Error en el inicio de sesión: " + error.message);
     }
 }
-
 </script>
 
 <template>
@@ -44,6 +42,7 @@ const handleSignIn = async () => {
         </div>
     </div>
 </template>
+
 
 <style scoped>
 

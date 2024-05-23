@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useTaskStore } from '@/stores/tasks'; 
 import { useUserStore } from '@/stores/user';
@@ -17,72 +17,55 @@ const taskDate = new Date();
 
 const padToTwoDigits = (num) => String(num).padStart(2, '0');
 
-
 const day = padToTwoDigits(taskDate.getDate());
 const month = padToTwoDigits(taskDate.getMonth() + 1);
 const year = taskDate.getFullYear();
 
-
 const formattedDate = `${year}-${month}-${day}`;
 
-
-async function handleAddTask(){
-
-    if (!user.value.user.id) {
+async function handleAddTask() {
+    if (!user.value.id) {
         alert('Error: No se pudo obtener el ID del usuario. Por favor, asegúrate de estar logueado.');
         return;
     }
 
-    if(taskTitle.value.length > 30 ){
+    if (taskTitle.value.length > 30) {
         alert('El título es demasiado largo, no puedes superar las 30 palabras');
-    }
-    else if(taskTitle.value.length < 3){
+    } else if (taskTitle.value.length < 3) {
         alert('El título es demasiado corto, necesitas más de 3 palabras');
-    }
-    else if(taskDescription.value.length < 10){
+    } else if (taskDescription.value.length < 10) {
         alert('La descripción es demasiado corta, necesitas más de 10 palabras');
-    }
-    else if(taskDescription.value.length > 150){
+    } else if (taskDescription.value.length > 150) {
         alert('La descripción es demasiado larga, no puedes superar las 150 palabras');
-    }
-    else if(!taskTag.value.includes('#') || taskTag.value.includes(' ')){
+    } else if (!taskTag.value.includes('#') || taskTag.value.includes(' ')) {
         alert('Necesitas incluir # al principio del tag y no puedes añadir espacios. Un solo tag por card');
-    }
-    else if(taskArea.value == '' || taskArea.value.length < 1){
+    } else if (taskArea.value == '' || taskArea.value.length < 1) {
         alert('Necesitas seleccionar la area de trabajo de tu card');
-    }
-
-    else{
-
+    } else {
         try {
-
             await taskStore.pushTask({
                 title: taskTitle.value,
                 description: taskDescription.value,
                 tag: taskTag.value,
                 area: taskArea.value,
                 inserted_at: formattedDate,
-                user_id: user.value.user.id
-        });
+                user_id: user.value.id
+            });
 
-            if (user) {
-            taskStore.fetchTasks(user.value.user.id); 
+            if (user.value) {
+                await taskStore.fetchTasks(user.value.id); 
+            }
+
+            alert("¡Tarea creada con éxito!");
+            isShown.value = false;
+            taskTitle.value = '';
+            taskDescription.value = '';
+            taskTag.value = '';
+            taskArea.value = '';
+        } catch (error) {
+            alert(error.message);
         }
-
-        alert("¡Tarea creada con éxito!");
-        isShown.value = false;
-        taskTitle.value = '';
-        taskDescription.value = '';
-        taskTag.value = '';
-        taskArea.value = '';
-    } catch (error) {
-        alert(error.message);
     }
-    }
-
-
-
-
 }
 </script>
 
@@ -115,6 +98,7 @@ async function handleAddTask(){
         </div>
     </div>
 </template>
+
 
 <style>
 

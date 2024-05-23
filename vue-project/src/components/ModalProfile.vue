@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watchEffect } from 'vue'
+import { ref, watchEffect, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useProfileStore } from '@/stores/profiles'
 import { useUserStore } from '@/stores/user'
@@ -15,16 +15,26 @@ const profileUser = ref('')
 const profileMail = ref('')
 
 const createProfileButton = ref(true);
-const updateProfileButton = ref(false);
+
+const fetchProfileData = async () => {
+  if (user.value) {
+    await profileStore.fetchProfiles(user.value.id);
+  }
+};
+
+onMounted(fetchProfileData);
 
 watchEffect(() => {
-    console.log(profile);
   if (profile.value) {
     profileName.value = profile.value.name
     profileUser.value = profile.value.user_name
     profileMail.value = profile.value.email
     createProfileButton.value = false; 
-    updateProfileButton.value = true;
+  } else {
+    profileName.value = ''
+    profileUser.value = ''
+    profileMail.value = ''
+    createProfileButton.value = true; 
   }
 })
 
@@ -44,41 +54,23 @@ const handleProfile = async () => {
     name: profileName.value,
     user_name: profileUser.value,
     email: profileMail.value,
-    user_id: user.value.user.id
+    user_id: user.value.id
   }
 
   try {
-    await profileStore.createProfile(user.value.user.id, profileData)
-    alert('Tu perfil se ha actualizado correctamente.')
+    if (createProfileButton.value) {
+      await profileStore.createProfile(profileData)
+      alert('Tu perfil se ha creado correctamente.')
+      createProfileButton.value = false;
+    } else {
+      await profileStore.updateProfile(user.value.id, profileData)
+      alert('Tu perfil se ha actualizado correctamente.')
+    }
+
+    // Fetch the profile data again to ensure state is updated
+    await fetchProfileData();
   } catch (error) {
-    alert('Hubo un error al crear tu perfil: ' + error.message)
-  }
-}
-
-const updateDataProfile = async () => {
-  if (
-    !profileName.value ||
-    !profileUser.value ||
-    !profileMail.value ||
-    !profileMail.value.includes('@') ||
-    !profileMail.value.includes('.')
-  ) {
-    alert('Por favor, completa todos los campos del formulario correctamente.')
-    return
-  }
-
-  const profileData = {
-    name: profileName.value,
-    user_name: profileUser.value,
-    email: profileMail.value,
-    user_id: user.value.user.id
-  }
-
-  try {
-    await profileStore.updateProfile(user.value.user.id, profileData)
-    alert('Tu perfil se ha actualizado correctamente.')
-  } catch (error) {
-    alert('Hubo un error al actualizar tu perfil: ' + error.message)
+    alert('Hubo un error al guardar tu perfil: ' + error.message)
   }
 }
 </script>
@@ -88,21 +80,24 @@ const updateDataProfile = async () => {
     <div id="modal-profile">
       <h2>Configura tu perfil</h2>
       <h3>Personaliza tu perfil con tu información</h3>
-      <form v-if='createProfileButton' @submit.prevent="handleProfile">
-        <input v-model="profileName" placeholder="Escribe aquí tu nombre ..."/>
-        <input v-model="profileUser" placeholder="Escribe aquí tu usuario ..."/>
-        <input v-model="profileMail" placeholder="Escribe aquí tu correo ..."/>
-        <button type="submit">CREAR PERFIL</button>
-      </form>
-      <form v-if='updateProfileButton' @submit.prevent="updateDataProfile">
-        <input v-model="profileName" placeholder="Escribe aquí tu nombre ..."/>
-        <input v-model="profileUser" placeholder="Escribe aquí tu usuario ..."/>
-        <input v-model="profileMail" placeholder="Escribe aquí tu correo ..."/>
-        <button type="submit">ACTUALIZAR PERFIL</button>
+      <form @submit.prevent="handleProfile">
+        <input v-model="profileName" placeholder="Escribe aquí tu nombre ..." />
+        <input v-model="profileUser" placeholder="Escribe aquí tu usuario ..." />
+        <input v-model="profileMail" placeholder="Escribe aquí tu correo ..." />
+        <button type="submit">{{ createProfileButton ? 'CREAR PERFIL' : 'ACTUALIZAR PERFIL' }}</button>
       </form>
     </div>
   </div>
 </template>
+
+
+
+
+
+
+
+
+
 
 <style scoped>
 #modal-profile-wrapper {

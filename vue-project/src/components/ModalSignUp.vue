@@ -9,7 +9,6 @@ const authConfirm = ref('');
 const signedUp = ref(false);
 const userStore = useUserStore();
 
-
 async function handleSignUp() {
     if (authPassword.value !== authConfirm.value) {
         alert("Las contraseñas no coinciden");
@@ -33,7 +32,13 @@ async function handleSignUp() {
         alert("¡Bravo! Te has registrado a SuperTaskManager. Bienvenido a la plataforma :D");
         router.push('/auth');
     } catch (error) {
-        alert(error.message);
+        if (error.message.includes('Email rate limit exceeded')) {
+            alert("Has intentado registrarte demasiadas veces en poco tiempo. Por favor, espera unos minutos antes de intentarlo nuevamente.");
+        } else if (error.message.includes('violates foreign key constraint')) {
+            alert("Error en el registro: No se pudo crear el perfil asociado.");
+        } else {
+            alert("Error en el registro: " + error.message);
+        }
         signedUp.value = false;
     }
 }
@@ -55,6 +60,9 @@ async function handleSignUp() {
         </div>
     </div>
 </template>
+
+
+
 
 <style scoped>
 

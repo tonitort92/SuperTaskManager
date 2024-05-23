@@ -7,47 +7,44 @@ export const useProfileStore = defineStore("profiles", {
   }),
   actions: {
     async fetchProfiles(userId) {
-      console.log(userId);
       if (!userId) {
         throw new Error('User ID is required to fetch your profile.');
       }
       const { data: profile, error } = await supabase
         .from("profiles")
         .select("*")
-        .eq('user_id', userId);
+        .eq('user_id', userId)
+        .single();
 
-      if (error) {
+      if (error && error.details !== "0 rows returned") {
         throw error;
       }
-      this.profile = profile[0];
-      console.log(profile[0])
+      this.profile = profile || null;
     },
 
-    async createProfile(profileId, profile) {
-      const { error } = await supabase
+    async createProfile(profile) {
+      const { data, error } = await supabase
         .from("profiles")
         .insert(profile)
-        .eq('user_id', profileId);
+        .single();
+
       if (error) {
-        console.error("Error from Supabase:", error);
         throw error;
       }
-
-
+      this.profile = data;
     },
 
     async updateProfile(profileId, profile) {
-        const { error } = await supabase
-          .from("profiles")
-          .update(profile)
-          .eq('user_id', profileId);
-  
-        if (error) {
-          console.error("Error from Supabase:", error);
-          throw error;
-        }
-  
+      const { data, error } = await supabase
+        .from("profiles")
+        .update(profile)
+        .eq('user_id', profileId)
+        .single();
 
+      if (error) {
+        throw error;
       }
-    },
+      this.profile = data;
+    }
+  },
 });

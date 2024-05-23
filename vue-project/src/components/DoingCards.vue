@@ -28,7 +28,7 @@ const doingTasks = computed(() => {
 
 const fetchTasksForUser = async () => {
   if (user.value) {
-    await taskStore.fetchTasks(user.value.user.id);
+    await taskStore.fetchTasks(user.value.id);
   }
 };
 
@@ -79,7 +79,7 @@ const handleEditTask = async () => {
   } else if (taskAreaEdit.value == '' || taskAreaEdit.value.length < 1) {
     alert('Necesitas seleccionar la area de trabajo de tu card');
   } else {
-    if (!user.value.user.id) {
+    if (!user.value.id) {
       alert('Error: No se pudo obtener el ID del usuario. Por favor, asegúrate de estar logueado.');
       return;
     }

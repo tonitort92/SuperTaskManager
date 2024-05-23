@@ -32,8 +32,8 @@ const handleUpdateTaskArea = async (taskId, task) => {
     task.area = 'Done';
     await taskStore.updateTask(taskId, task);
     if (user.value) {
-      console.log("Fetching tasks for user:", user.value.user.id);
-      await taskStore.fetchTasks(user.value.user.id); 
+      console.log("Fetching tasks for user:", user.value.id);
+      await taskStore.fetchTasks(user.value.id); 
     }
   } catch (error) {
     console.error('Error updating task:', error);
@@ -44,7 +44,7 @@ const handleDeleteTask = async (taskId) => {
   try {
     await taskStore.deleteTask(taskId);
     if (user.value) {
-      await taskStore.fetchTasks(user.value.user.id); 
+      await taskStore.fetchTasks(user.value.id); 
     }
   } catch (error) {
     console.error('Error deleting task:', error);
@@ -78,7 +78,7 @@ const handleEditTask = async () => {
   } else if (taskAreaEdit.value == '' || taskAreaEdit.value.length < 1) {
     alert('Necesitas seleccionar la area de trabajo de tu card');
   } else {
-    if (!user.value.user.id) {
+    if (!user.value.id) {
       alert('Error: No se pudo obtener el ID del usuario. Por favor, asegúrate de estar logueado.');
       return;
     }
@@ -89,8 +89,8 @@ const handleEditTask = async () => {
       task.area = taskAreaEdit.value;
       await taskStore.updateTask(taskId, task);
       if (user.value) {
-        console.log("Fetching tasks for user:", user.value.user.id);
-        await taskStore.fetchTasks(user.value.user.id); 
+        console.log("Fetching tasks for user:", user.value.id);
+        await taskStore.fetchTasks(user.value.id); 
       }
       isShown.value = false; // Cerrar el modal después de actualizar la tarea
     } catch (error) {
@@ -142,6 +142,7 @@ const handleEditTask = async () => {
     </div>
   </div>
 </template>
+
 
 
 <style scoped>
