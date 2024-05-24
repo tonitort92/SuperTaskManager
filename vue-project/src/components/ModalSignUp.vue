@@ -64,49 +64,54 @@ async function handleSignUp() {
 
 
 
-<style scoped>
 
-#modal-auth-wrapper{ 
+
+
+<style scoped>
+#modal-auth-wrapper {
     display: flex;
     align-items: center;
     align-content: center;
     height: 100vh;
     justify-content: center;
+    padding: 10px;
 }
 
-#modal-auth{
-    max-width: 640%;
-    min-width: 640px;
+#modal-auth {
+    max-width: 640px;
+    min-width: 300px;
+    width: 100%;
     border-radius: 10px;
     background-color: #fff;
-    padding:20px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-content: center;
     align-items: center;
-    height: 500px;
+    height: auto;
     gap: 30px;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    border-top: 20px solid rgba(59,126,195,1);
-    border-bottom: 20px solid rgba(59,126,195,1);;
+    border-top: 20px solid rgba(59, 126, 195, 1);
+    border-bottom: 20px solid rgba(59, 126, 195, 1);
 }
 
-#modal-auth h2{
+#modal-auth h2 {
     font-weight: 900;
 }
 
-#modal-auth h2 span{
+#modal-auth h2 span {
     color: cornflowerblue;
 }
 
-#modal-auth h3{
+#modal-auth h3 {
     font-weight: 500;
 }
 
-#modal-auth form{
+#modal-auth form {
     display: flex;
     flex-direction: column;
+    width: 100%;
     max-width: 300px;
     text-align: center;
     justify-content: center;
@@ -114,44 +119,85 @@ async function handleSignUp() {
     gap: 15px;
 }
 
-#modal-auth form input{
+#modal-auth form input {
     border: none;
     border-radius: 20px;
     background-color: #f8f8f8;
     height: 30px;
     text-align: center;
-    width: 400px;
-
+    width: 100%;
+    max-width: 400px;
 }
 
 #modal-auth form input:focus {
     outline: none;
-    border: 3px solid rgba(59,126,195,1);
+    border: 3px solid rgba(59, 126, 195, 1);
     background-color: rgb(239, 247, 255);
+}
 
-  }
-  
-
-#modal-auth form button{
+#modal-auth form button {
     height: 45px;
     width: 200px;
-    border: none; 
+    border: none;
     border-radius: 20px;
     margin-top: 20px;
-    background: rgb(59,126,195);
-    background: linear-gradient(32deg, rgba(59,126,195,1) 33%, rgba(0,212,255,1) 100%);
+    background: rgb(59, 126, 195);
+    background: linear-gradient(32deg, rgba(59, 126, 195, 1) 33%, rgba(0, 212, 255, 1) 100%);
     color: white;
     font-weight: bolder;
     letter-spacing: 3px;
     height: 40px;
 }
 
-#modal-auth img{
+#modal-auth img {
     width: 120px;
 }
 
-a:-webkit-any-link { text-decoration: none; color: cornflowerblue; font-weight: 500; }
+a:-webkit-any-link {
+    text-decoration: none;
+    color: cornflowerblue;
+    font-weight: 500;
+}
 
-a:-webkit-any-link:hover { text-decoration: none; color: rgb(62, 107, 190); font-weight: 500; }
+a:-webkit-any-link:hover {
+    text-decoration: none;
+    color: rgb(62, 107, 190);
+    font-weight: 500;
+}
 
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+    #modal-auth {
+        padding: 15px;
+    }
+
+    #modal-auth form input {
+        max-width: 100%;
+    }
+
+    #modal-auth form button {
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    #modal-auth {
+        padding: 10px;
+    }
+
+    #modal-auth form input {
+        max-width: 100%;
+    }
+
+    #modal-auth form button {
+        width: 100%;
+        max-width: 150px;
+    }
+
+    #modal-auth h2, #modal-auth h3 {
+        text-align: center;
+    }
+}
 </style>
+

@@ -1,17 +1,9 @@
 <script setup>
-
 import BacklogCards from './BacklogCards.vue';
 import CommitedCards from './CommitedCards.vue';
 import TodoCards from './TodoCards.vue';
 import DoingCards from './DoingCards.vue';
 import DoneCards from './DoneCards.vue';
-
-/*onMounted(async () => {
-  if (user.value) {
-    await taskStore.fetchTasks(user.value.id); 
-  }
-});*/
-
 </script>
 
 <template>
@@ -57,7 +49,7 @@ import DoneCards from './DoneCards.vue';
     justify-content: center;
     margin-top: 100px;
     height: auto;
-    min-width: 100%;
+    width: 100%;
     overflow-x: hidden;
 }
 
@@ -71,8 +63,8 @@ import DoneCards from './DoneCards.vue';
     display: flex;
     flex-direction: row;
     gap: 20px;
-    flex-wrap: wrap;
     justify-content: center;
+
 }
 
 .column {
@@ -102,12 +94,21 @@ import DoneCards from './DoneCards.vue';
     .column {
         max-width: 100%;
         width: 100%;
+        min-width: 100%;
     }
 }
 
 @media (max-width: 768px) {
     #task-table {
         padding: 20px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .column {
+        max-width: 100%;
+        width: 100%;
+        min-width: 100%;
     }
 }
 </style>

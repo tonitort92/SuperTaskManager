@@ -99,6 +99,7 @@ const handleProfile = async () => {
 
 
 
+
 <style scoped>
 #modal-profile-wrapper {
   display: flex;
@@ -106,6 +107,7 @@ const handleProfile = async () => {
   align-content: center;
   justify-content: center;
   height: 100vh;
+  padding: 10px;
 }
 
 .file-input-wrapper {
@@ -137,8 +139,9 @@ input[type='file'] {
 }
 
 #modal-profile {
-  max-width: 640%;
-  min-width: 640px;
+  max-width: 640px;
+  min-width: 300px;
+  width: 100%;
   border-radius: 10px;
   background-color: #fff;
   padding: 20px;
@@ -165,6 +168,7 @@ input[type='file'] {
 #modal-profile form {
   display: flex;
   flex-direction: column;
+  width: 100%;
   max-width: 300px;
   text-align: center;
   justify-content: center;
@@ -178,7 +182,8 @@ input[type='file'] {
   background-color: #f8f8f8;
   height: 30px;
   text-align: center;
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
 }
 
 #modal-profile form input:button {
@@ -220,5 +225,40 @@ a:-webkit-any-link:hover {
   text-decoration: none;
   color: rgb(62, 107, 190);
   font-weight: 500;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+  #modal-profile {
+    padding: 15px;
+  }
+
+  #modal-profile form input {
+    max-width: 100%;
+  }
+
+  #modal-profile form button {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  #modal-profile {
+    padding: 10px;
+  }
+
+  #modal-profile form input {
+    max-width: 100%;
+  }
+
+  #modal-profile form button {
+    width: 100%;
+    max-width: 150px;
+  }
+
+  #modal-profile h2, #modal-profile h3 {
+    text-align: center;
+  }
 }
 </style>

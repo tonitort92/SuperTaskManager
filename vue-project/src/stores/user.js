@@ -10,10 +10,16 @@ export const useUserStore = defineStore('user', {
   actions: {
     async fetchUser() {
       const { data, error } = await supabase.auth.getUser();
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching user:', error);
+        throw error;
+      }
       if (data.user) {
         this.user = data.user;
         console.log('User stored:', this.user);
+      } else {
+        console.error('No user found in fetchUser');
+        throw new Error('No user found');
       }
     },
     async signUp(email, password) {
@@ -21,7 +27,10 @@ export const useUserStore = defineStore('user', {
         email: email,
         password: password
       });
-      if (error) throw error;
+      if (error) {
+        console.error('Error during sign up:', error);
+        throw error;
+      }
       if (data.user) {
         this.user = data.user;
         try {
@@ -29,9 +38,11 @@ export const useUserStore = defineStore('user', {
         } catch (profileError) {
           console.error('Error creating profile:', profileError);
           // Opcional: Borrar el usuario si la creación del perfil falla
-          await supabase.auth.api.deleteUser(data.user.id);
+          await supabase.auth.admin.deleteUser(data.user.id);
           throw profileError;
         }
+      } else {
+        console.error('No user returned during sign up');
       }
     },
     async createProfile(email) {
@@ -43,6 +54,7 @@ export const useUserStore = defineStore('user', {
         .from('profiles')
         .insert([profileData]);
       if (error) {
+        console.error('Error inserting profile:', error);
         throw error;
       }
     },
@@ -51,15 +63,24 @@ export const useUserStore = defineStore('user', {
         email: email,
         password: password,
       });
-      if (error) throw error;
+      if (error) {
+        console.error('Error during sign in:', error);
+        throw error;
+      }
       if (data.user) {
         this.user = data.user;
         console.log('User signed in:', this.user);
+      } else {
+        console.error('No user found during sign in');
+        throw new Error('No user found');
       }
     },
     async logOut() {
       const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      if (error) {
+        console.error('Error during log out:', error);
+        throw error;
+      }
       this.user = null;
       useProfileStore().profile = null;
     },

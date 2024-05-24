@@ -10,16 +10,15 @@ export const useProfileStore = defineStore("profiles", {
       if (!userId) {
         throw new Error('User ID is required to fetch your profile.');
       }
-      const { data: profile, error } = await supabase
+      const { data: profiles, error } = await supabase
         .from("profiles")
         .select("*")
-        .eq('user_id', userId)
-        .single();
+        .eq('user_id', userId);
 
-      if (error && error.details !== "0 rows returned") {
+      if (error) {
         throw error;
       }
-      this.profile = profile || null;
+      this.profile = profiles.length > 0 ? profiles[0] : null;
     },
 
     async createProfile(profile) {

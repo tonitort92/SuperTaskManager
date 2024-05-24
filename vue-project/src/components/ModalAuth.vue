@@ -16,12 +16,18 @@ const { user } = storeToRefs(userStore);
 const handleSignIn = async () => {
     try {
         await userStore.signIn(email.value, password.value);
-        alert("¡Inicio de sesión exitoso!");
         await userStore.fetchUser();
-        await taskStore.fetchTasks(user.value.id);
-        await profileStore.fetchProfiles(user.value.id);
-        router.push('/');
+        if (user.value) {
+            console.log('Usuario después de fetchUser:', user.value);
+            await taskStore.fetchTasks(user.value.id);
+            await profileStore.fetchProfiles(user.value.id);
+            router.push('/');
+            alert("¡Inicio de sesión exitoso!");
+        } else {
+            throw new Error('No se pudo obtener el usuario después del inicio de sesión');
+        }
     } catch (error) {
+        console.error('Error en el inicio de sesión:', error);
         alert("Error en el inicio de sesión: " + error.message);
     }
 }
@@ -42,6 +48,8 @@ const handleSignIn = async () => {
         </div>
     </div>
 </template>
+
+
 
 
 <style scoped>

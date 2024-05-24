@@ -245,6 +245,41 @@ const handleEditTask = async () => {
   gap: 30px;
 }
 
+#modal-edit-task form select {
+  border: none;
+  border-radius: 20px;
+  background-color: #f8f8f8;
+  height: 30px;
+  text-align: center;
+  width: 400px;
+}
+
+#modal-edit-task form select:focus {
+  outline: none;
+  border: 3px solid rgba(59,126,195,1);
+  background-color: rgb(239, 247, 255);
+  font-family: Work Sans;
+}
+
+#modal-edit-task form textarea {
+  border: none;
+  border-radius: 20px;
+  background-color: #f8f8f8;
+  height: 100px;
+  text-align: center;
+  width: 400px;
+  font-family: Work Sans;
+  display: flex;
+}
+
+#modal-edit-task form textarea:focus {
+  outline: none;
+  border: 3px solid rgba(59,126,195,1);
+  background-color: rgb(239, 247, 255);
+  font-family: Work Sans;
+}
+
+
 #task-table .task-card {
   background-color: #fcfcfc;
   display: flex;
@@ -345,4 +380,49 @@ span {
 #task-table .task-card .task-card-actions button:nth-of-type(3):hover {
   background-color: rgb(160, 6, 36);
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  #modal-edit-task {
+    max-width: 90%;
+    min-width: 300px;
+    padding: 20px;
+    height: auto;
+    gap: 20px;
+  }
+
+  #modal-edit-task h4 {
+    font-size: 24px;
+  }
+
+  #modal-edit-task form {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  #modal-edit-task form input,
+  #modal-edit-task form textarea,
+  #modal-edit-task form select {
+    width: 100%;
+    height: 40px;
+  }
+
+  #modal-edit-task form textarea {
+    resize: vertical; /* Permitir redimensionar verticalmente */
+    height: auto; /* Altura automática para el textarea */
+  }
+
+  #modal-edit-task form button,
+  #modal-edit-task form button:nth-of-type(2) {
+    width: 100%;
+    height: 50px;
+  }
+
+  #modal-edit-task form div {
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+  }
+}
+
 </style>
