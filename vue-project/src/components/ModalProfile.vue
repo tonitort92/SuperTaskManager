@@ -1,42 +1,55 @@
 <script setup>
+//We import the main methods of vue for this component
+
 import { ref, watchEffect, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useProfileStore } from '@/stores/profiles'
 import { useUserStore } from '@/stores/user'
 
+//We import the main stores to use shared functions across the components
+
 const profileStore = useProfileStore()
+const userStore = useUserStore()
+
+//We import the main reactive objects we need from store, already fetched and ready
+
+const { user } = storeToRefs(userStore)
 const { profile } = storeToRefs(profileStore)
 
-const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
+//We define our main reactive objects to work as variables
 
 const profileName = ref('')
 const profileUser = ref('')
 const profileMail = ref('')
+const createProfileButton = ref(true)
 
-const createProfileButton = ref(true);
+//We define the main function to fetch the profile data of the user
 
 const fetchProfileData = async () => {
   if (user.value) {
-    await profileStore.fetchProfiles(user.value.id);
+    await profileStore.fetchProfiles(user.value.id)
   }
-};
+}
 
-onMounted(fetchProfileData);
+onMounted(fetchProfileData)
+
+//We define a wtatcheffect to check constantly if there's any content change
 
 watchEffect(() => {
   if (profile.value) {
     profileName.value = profile.value.name
     profileUser.value = profile.value.user_name
     profileMail.value = profile.value.email
-    createProfileButton.value = false; 
+    createProfileButton.value = false
   } else {
     profileName.value = ''
     profileUser.value = ''
     profileMail.value = ''
-    createProfileButton.value = true; 
+    createProfileButton.value = true
   }
 })
+
+//Main function to modify profile
 
 const handleProfile = async () => {
   if (
@@ -61,19 +74,21 @@ const handleProfile = async () => {
     if (createProfileButton.value) {
       await profileStore.createProfile(profileData)
       alert('Tu perfil se ha creado correctamente.')
-      createProfileButton.value = false;
+      createProfileButton.value = false
     } else {
       await profileStore.updateProfile(user.value.id, profileData)
       alert('Tu perfil se ha actualizado correctamente.')
     }
 
     // Fetch the profile data again to ensure state is updated
-    await fetchProfileData();
+    await fetchProfileData()
   } catch (error) {
     alert('Hubo un error al guardar tu perfil: ' + error.message)
   }
 }
 </script>
+
+<!--Here we define with HTML the main structure and embedded functions to it-->
 
 <template>
   <div id="modal-profile-wrapper">
@@ -84,21 +99,15 @@ const handleProfile = async () => {
         <input v-model="profileName" placeholder="Escribe aquí tu nombre ..." />
         <input v-model="profileUser" placeholder="Escribe aquí tu usuario ..." />
         <input v-model="profileMail" placeholder="Escribe aquí tu correo ..." />
-        <button type="submit">{{ createProfileButton ? 'CREAR PERFIL' : 'ACTUALIZAR PERFIL' }}</button>
+        <button type="submit">
+          {{ createProfileButton ? 'CREAR PERFIL' : 'ACTUALIZAR PERFIL' }}
+        </button>
       </form>
     </div>
   </div>
 </template>
 
-
-
-
-
-
-
-
-
-
+<!--Here we define with CSS the main styles and responsive elements-->
 
 <style scoped>
 #modal-profile-wrapper {
@@ -257,7 +266,8 @@ a:-webkit-any-link:hover {
     max-width: 150px;
   }
 
-  #modal-profile h2, #modal-profile h3 {
+  #modal-profile h2,
+  #modal-profile h3 {
     text-align: center;
   }
 }

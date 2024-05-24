@@ -16,11 +16,11 @@ onMounted(async () => {
   try {
     await userStore.fetchUser() // fetch user data
     if (!user.value) {
-      router.push({ path: '/auth' });
+      router.push({ path: '/auth' })
     } else {
-      await taskStore.fetchTasks(user.value.id);
-      await profileStore.fetchProfiles(user.value.id);
-      router.push({ path: '/' });
+      await taskStore.fetchTasks(user.value.id)
+      await profileStore.fetchProfiles(user.value.id)
+      router.push({ path: '/' })
     }
   } catch (e) {
     console.error(e)
@@ -33,4 +33,3 @@ onMounted(async () => {
     <router-view />
   </section>
 </template>
-

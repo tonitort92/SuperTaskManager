@@ -1,111 +1,132 @@
 <script setup>
-import { ref, computed } from 'vue';
-import { storeToRefs } from 'pinia';
-import { useTaskStore } from '@/stores/tasks';
-import { useUserStore } from '@/stores/user';
+//We import the main methods of vue for this component
 
-const userStore = useUserStore();
-const taskStore = useTaskStore();
+import { ref, computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useTaskStore } from '@/stores/tasks'
+import { useUserStore } from '@/stores/user'
 
-const { user } = storeToRefs(userStore);
-const { tasks } = storeToRefs(taskStore);
+//We import the main stores to use shared functions across the components
 
-const isShown = ref(false);
+const userStore = useUserStore()
+const taskStore = useTaskStore()
 
-const taskTitleEdit = ref('');
-const taskDescriptionEdit = ref('');
-const taskTagEdit = ref('');
-const taskAreaEdit = ref('');
+//We import the main reactive objects we need from store, already fetched and ready
 
-const selectedTaskId = ref(null); 
-const selectedTask = ref(null);
+const { user } = storeToRefs(userStore)
+const { tasks } = storeToRefs(taskStore)
 
-const doneTaskArea = 'Done';
+//We define our main reactive objects to work as variables
+
+const isShown = ref(false)
+const taskTitleEdit = ref('')
+const taskDescriptionEdit = ref('')
+const taskTagEdit = ref('')
+const taskAreaEdit = ref('')
+const selectedTaskId = ref(null)
+const selectedTask = ref(null)
+const doneTaskArea = 'Done'
+
+//We define our main computed to live reload the content of cards easily
 
 const doneTasks = computed(() => {
-  return tasks.value ? tasks.value.filter(task => task.area === doneTaskArea) : [];
-});
+  return tasks.value ? tasks.value.filter((task) => task.area === doneTaskArea) : []
+})
+
+//We refetch the cards of the user to live reload the content
 
 const fetchTasksForUser = async () => {
   if (user.value) {
-    await taskStore.fetchTasks(user.value.id);
+    await taskStore.fetchTasks(user.value.id)
   }
-};
+}
+
+//We create a function to complete tasks with a button
 
 const handleUpdateTaskArea = async (taskId, task) => {
   try {
-    task.is_complete = !task.is_complete;
-    task.area = task.is_complete ? 'Done' : 'To do';
-    await taskStore.updateTask(taskId, task);
-    await fetchTasksForUser();
+    task.is_complete = !task.is_complete
+    task.area = task.is_complete ? 'Done' : 'To do'
+    await taskStore.updateTask(taskId, task)
+    await fetchTasksForUser()
   } catch (error) {
-    console.error('Error updating task:', error);
+    console.error('Error updating task:', error)
   }
-};
+}
+
+//We create a function to delete tasks with a button
 
 const handleDeleteTask = async (taskId) => {
   try {
-    await taskStore.deleteTask(taskId);
-    await fetchTasksForUser();
+    await taskStore.deleteTask(taskId)
+    await fetchTasksForUser()
   } catch (error) {
-    console.error('Error deleting task:', error);
+    console.error('Error deleting task:', error)
   }
-};
+}
+
+//This function help us to open a modal to edit existing tasks
 
 const openEditModal = (task) => {
-  isShown.value = true;
-  selectedTaskId.value = task.id;
-  selectedTask.value = task;
-  taskTitleEdit.value = task.title;
-  taskDescriptionEdit.value = task.description;
-  taskTagEdit.value = task.tag;
-  taskAreaEdit.value = task.area;
-};
+  isShown.value = true
+  selectedTaskId.value = task.id
+  selectedTask.value = task
+  taskTitleEdit.value = task.title
+  taskDescriptionEdit.value = task.description
+  taskTagEdit.value = task.tag
+  taskAreaEdit.value = task.area
+}
+
+//This function let us modify the content of the task
 
 const handleEditTask = async () => {
-  const taskId = selectedTaskId.value;
-  const task = selectedTask.value;
+  const taskId = selectedTaskId.value
+  const task = selectedTask.value
 
   if (taskTitleEdit.value.length > 30) {
-    alert('El título es demasiado largo, no puedes superar las 30 palabras');
+    alert('El título es demasiado largo, no puedes superar las 30 palabras')
   } else if (taskTitleEdit.value.length < 3) {
-    alert('El título es demasiado corto, necesitas más de 3 palabras');
+    alert('El título es demasiado corto, necesitas más de 3 palabras')
   } else if (taskDescriptionEdit.value.length < 10) {
-    alert('La descripción es demasiado corta, necesitas más de 10 palabras');
+    alert('La descripción es demasiado corta, necesitas más de 10 palabras')
   } else if (taskDescriptionEdit.value.length > 150) {
-    alert('La descripción es demasiado larga, no puedes superar las 150 palabras');
+    alert('La descripción es demasiado larga, no puedes superar las 150 palabras')
   } else if (!taskTagEdit.value.includes('#') || taskTagEdit.value.includes(' ')) {
-    alert('Necesitas incluir # al principio del tag y no puedes añadir espacios. Un solo tag por card');
+    alert(
+      'Necesitas incluir # al principio del tag y no puedes añadir espacios. Un solo tag por card'
+    )
   } else if (taskAreaEdit.value == '' || taskAreaEdit.value.length < 1) {
-    alert('Necesitas seleccionar la area de trabajo de tu card');
+    alert('Necesitas seleccionar la area de trabajo de tu card')
   } else {
     if (!user.value.id) {
-      alert('Error: No se pudo obtener el ID del usuario. Por favor, asegúrate de estar logueado.');
-      return;
+      alert('Error: No se pudo obtener el ID del usuario. Por favor, asegúrate de estar logueado.')
+      return
     }
     try {
-      task.title = taskTitleEdit.value;
-      task.description = taskDescriptionEdit.value;
-      task.tag = taskTagEdit.value;
-      task.area = taskAreaEdit.value;
-      await taskStore.updateTask(taskId, task);
-      await fetchTasksForUser();
-      isShown.value = false; // Cerrar el modal después de actualizar la tarea
+      task.title = taskTitleEdit.value
+      task.description = taskDescriptionEdit.value
+      task.tag = taskTagEdit.value
+      task.area = taskAreaEdit.value
+      await taskStore.updateTask(taskId, task)
+      await fetchTasksForUser()
+      isShown.value = false // Cerrar el modal después de actualizar la tarea
     } catch (error) {
-      console.error('Error updating task:', error);
+      console.error('Error updating task:', error)
     }
   }
-};
+}
 </script>
+
+<!--Here we define with HTML the main structure and embedded functions to it-->
 
 <template>
   <div v-if="isShown" id="modal-edit-task-wrapper">
     <div id="modal-edit-task">
       <h4>Edita la tarea</h4>
       <form @submit.prevent="handleEditTask">
-        <input v-model="taskTitleEdit" type="text" placeholder="Escribe un título a tu card">
+        <input v-model="taskTitleEdit" type="text" placeholder="Escribe un título a tu card" />
         <textarea v-model="taskDescriptionEdit" placeholder="Describe yourself here..."></textarea>
-        <input v-model="taskTagEdit" type="text" placeholder="Escribe '#' y el tag identificador">
+        <input v-model="taskTagEdit" type="text" placeholder="Escribe '#' y el tag identificador" />
         <label for="area-of-work">ESTADO DE LA CARD:</label>
         <select v-model="taskAreaEdit" id="area-of-work" name="areas">
           <option value="Backlog">BACKLOG</option>
@@ -121,7 +142,7 @@ const handleEditTask = async () => {
       </form>
     </div>
   </div>
-  
+
   <div class="task-card" v-for="task in doneTasks" :key="task.id">
     <div class="task-card-title">
       <h4>{{ task.title }}</h4>
@@ -141,6 +162,7 @@ const handleEditTask = async () => {
   </div>
 </template>
 
+<!--Here we define with CSS the main styles and responsive elements-->
 
 <style scoped>
 #modal-edit-task-wrapper {
@@ -154,7 +176,7 @@ const handleEditTask = async () => {
   top: 0;
   left: 0;
   width: 100vw;
-  z-index: 1000; 
+  z-index: 1000;
   display: flex;
 }
 
@@ -172,8 +194,8 @@ const handleEditTask = async () => {
   height: 500px;
   gap: 30px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  border-top: 20px solid rgba(59,126,195,1);
-  border-bottom: 20px solid rgba(59,126,195,1);
+  border-top: 20px solid rgba(59, 126, 195, 1);
+  border-bottom: 20px solid rgba(59, 126, 195, 1);
 }
 
 #modal-edit-task h4 {
@@ -201,18 +223,18 @@ const handleEditTask = async () => {
 
 #modal-edit-task form input:focus {
   outline: none;
-  border: 3px solid rgba(59,126,195,1);
+  border: 3px solid rgba(59, 126, 195, 1);
   background-color: rgb(239, 247, 255);
 }
 
 #modal-edit-task form button {
   height: 45px;
   width: 200px;
-  border: none; 
+  border: none;
   border-radius: 20px;
   margin-top: 20px;
-  background: rgb(59,126,195);
-  background: linear-gradient(32deg, rgba(59,126,195,1) 33%, rgba(0,212,255,1) 100%);
+  background: rgb(59, 126, 195);
+  background: linear-gradient(32deg, rgba(59, 126, 195, 1) 33%, rgba(0, 212, 255, 1) 100%);
   color: white;
   font-weight: bolder;
   letter-spacing: 3px;
@@ -220,14 +242,14 @@ const handleEditTask = async () => {
 }
 
 #modal-edit-task form button:hover {
-  background: rgb(59,126,195);
+  background: rgb(59, 126, 195);
   background: linear-gradient(32deg, rgb(34, 89, 145) 33%, rgb(61, 129, 143) 100%);
 }
 
 #modal-edit-task form button:nth-of-type(2) {
   height: 45px;
   width: 200px;
-  border: none; 
+  border: none;
   border-radius: 20px;
   margin-top: 20px;
   background: crimson;
@@ -258,7 +280,7 @@ const handleEditTask = async () => {
 
 #modal-edit-task form select:focus {
   outline: none;
-  border: 3px solid rgba(59,126,195,1);
+  border: 3px solid rgba(59, 126, 195, 1);
   background-color: rgb(239, 247, 255);
   font-family: Work Sans;
 }
@@ -276,11 +298,10 @@ const handleEditTask = async () => {
 
 #modal-edit-task form textarea:focus {
   outline: none;
-  border: 3px solid rgba(59,126,195,1);
+  border: 3px solid rgba(59, 126, 195, 1);
   background-color: rgb(239, 247, 255);
   font-family: Work Sans;
 }
-
 
 #task-table .task-card {
   background-color: #fcfcfc;
@@ -296,7 +317,7 @@ const handleEditTask = async () => {
 
 #task-table .task-card .task-card-title h4 {
   font-size: 16px;
-  word-wrap: break-word; 
+  word-wrap: break-word;
 }
 
 #task-table .task-card .task-card-data {
@@ -304,7 +325,7 @@ const handleEditTask = async () => {
   flex-direction: column;
   gap: 5px;
   font-size: 14px;
-  word-wrap: break-word; 
+  word-wrap: break-word;
 }
 
 #task-table .task-card .task-card-tags {
@@ -313,7 +334,7 @@ const handleEditTask = async () => {
   gap: 10px;
   font-size: 13px;
   justify-content: space-between;
-  word-wrap: break-word; 
+  word-wrap: break-word;
 }
 
 #task-table .task-card .task-card-tags p,
@@ -343,7 +364,7 @@ span {
 
 #task-table .task-card .task-card-actions button:nth-of-type(1) {
   background-color: mediumseagreen;
-  background-image: url("../assets/completed-icon.png");
+  background-image: url('../assets/completed-icon.png');
   background-size: 20px;
   background-position: center;
   background-repeat: no-repeat;
@@ -359,7 +380,7 @@ span {
   background-color: rgb(255, 173, 21);
   color: white;
   font-weight: 700;
-  background-image: url("../assets/edit-icon.png");
+  background-image: url('../assets/edit-icon.png');
   background-size: 20px;
   background-position: center;
   background-repeat: no-repeat;
@@ -373,7 +394,7 @@ span {
   background-color: crimson;
   color: white;
   font-weight: 700;
-  background-image: url("../assets/delete-icon.png");
+  background-image: url('../assets/delete-icon.png');
   background-size: 20px;
   background-position: center;
   background-repeat: no-repeat;
@@ -426,5 +447,4 @@ span {
     width: 100%;
   }
 }
-
 </style>
